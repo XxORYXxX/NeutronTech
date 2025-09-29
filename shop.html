@@ -8,7 +8,7 @@
 </head>
 <body>
 <header>
-    <img class="logo" src="images/logo.svg" alt="NeutronTech Logo" width="100" height="100">
+    <a href="index.html" class="logo"><img src="images/logo.svg" alt="NeutronTech Logo" width="100" height="100"></a>
     <h1>NeutronTech </h1>
     <h2>Welcome to NeutronTech, your go-to platform for all things related to technology and computing.</h2>
     <nav>
@@ -86,7 +86,7 @@
             ${
                 product.stock > 0
                     ? `<button class="button" onclick="addToCart('${product.name}', '${product.description}', '${product.price}', '${product.imageUrl}', '${product.id}')">Purchase</button>`
-                    : `<button class="button" disabled>Agotado</button>`
+                    : `<button class="button" disabled>Sold out</button>`
             }
         </div>
         `;
