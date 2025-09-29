@@ -8,6 +8,7 @@ require('dotenv').config();
 
 const app = express();
 const PORT = 3000;
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
 app.use(cors({
     origin: 'http://localhost:63342',
@@ -37,9 +38,6 @@ pool.getConnection((err, connection) => {
         connection.release();
     }
 });
-
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
-
 app.post('/chat', async (req, res) => {
     try {
         const { message } = req.body;

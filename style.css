@@ -333,7 +333,7 @@ main > h2 {
     transition: 0.2s;
     background-color: var(--secondary-color);
     color: var(--primary-color);
-    transform: scale(1.1);
+    transform: scale(1.02);
     box-shadow: 2px 2px 5px var(--secondary-color);
     --btn-bg: var(--primary-color);
     --btn-fg: var(--secondary-color);
@@ -644,6 +644,7 @@ footer div a:hover {
     color: gray;
     border: none;
     transition: 0.2s;
+    width: 97%;
 }
 
 .userInput:focus {
