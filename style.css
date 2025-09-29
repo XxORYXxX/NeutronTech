@@ -541,6 +541,17 @@ footer div a:hover {
     box-shadow: 2px 2px 5px var(--secondary-color);
 }
 
+.button:disabled,
+.button[disabled],
+.button:disabled:hover,
+.button[disabled]:hover {
+    color: var(--primary-color) !important;
+    background-color: gray !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important;
+    transition: 0.2s ease !important;
+}
+
 /* FLOATING CHAT */
 .chat-float-icon {
     position: fixed;

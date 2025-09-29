@@ -88,7 +88,7 @@ app.get('/api/products/category/:category', async (req, res) => {
     try {
         connection = await pool.promise().getConnection();
         const [rows] = await connection.execute(
-            `SELECT id, name, description, price, image, stock, category, ratings FROM products WHERE category = ?`,
+            `SELECT id, name, description, price, image, stock, category FROM products WHERE category = ?`,
             [req.params.category]
         );
         // Add image URL
