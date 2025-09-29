@@ -22,16 +22,19 @@
     <section>
         <div class="cart-container">
             <div class="cart-item">
-
+                <!-- Cart items will be dynamically inserted here -->
             </div>
         </div>
     </section>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<div id="qrContainer"></div>
+<div id="ratingSurvey"></div>
 <footer>
     <!-- Theme Toggle Button -->
-    <button id="toggleThemeBtn" type="button" aria-pressed="">Light Mode</button>
+    <button id="toggleThemeBtn" type="button" aria-pressed="true">Light Mode</button>
     <!-- Cart bottom -->
-    <a class="cart" href="cart.html"><img src="images/cart.svg" width="30" height="30"></a>
+    <a class="cart" href="cart.html"><img src="images/cart.svg" width="30" height="30" alt="product image"></a>
     <!-- Footer Content -->
     <p> &copy 2025 NeutronTech. All rights reserved. Follow us on:</p>
     <div>
@@ -56,7 +59,6 @@
 </div>
 </body>
 </html>
-
 <script>
     (function () {
         const KEY = 'themeInverted';
@@ -195,20 +197,44 @@
     }
 
     // Función para eliminar un producto del cart
-    function deleteCartItem(index) {
+    async function deleteCartItem(index) {
         const savedCart = localStorage.getItem('cart');
         if (savedCart) {
             const cart = JSON.parse(savedCart);
+            const product = cart[index];
             cart.splice(index, 1);
             localStorage.setItem('cart', JSON.stringify(cart));
+            await fetch('http://localhost:3000/api/products/increment-stock', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: product.id })
+            });
             showCartContents();
         }
     }
 
     // Función para realizar el pago
     function handlePurchaseCompletion() {
+        const savedCart = localStorage.getItem('cart');
+        // Generate QR with cart details before clearing the cart
+        const qrContainer = document.getElementById('qrContainer');
+        const  ratingSurvey = document.getElementById('ratingSurvey');
+        qrContainer.innerHTML = ''; // Clear previous QR
+
+        if (savedCart) {
+            const cart = JSON.parse(savedCart);
+            const details = cart.map(p => `${p.nombre} ($${p.precio})`).join(', ');
+            const qrText = `Compra NeutronTech: ${details}`;
+            QRCode.toCanvas(qrText, {width: 256}, function (error, canvas) {
+                if (error) {
+                    qrContainer.innerHTML = '<p>Error generating QR code.</p>';
+                } else {
+                    qrContainer.innerHTML = '<h3>Tu código QR de compra:</h3>';
+                    qrContainer.appendChild(canvas);
+                }
+            });
+        }
         alert('¡Gracias por tu compra!');
-        // Limpiar el cart después de la compra
         localStorage.removeItem('cart');
         showCartContents();
     }

@@ -283,7 +283,7 @@ main > h2 {
     object-fit: fill;
     transition: 0.2s;
     border-radius: 10px 10px 0 0;
-    border: 2px solid var(--btn-bg);
+    border-bottom: 2px solid var(--btn-bg);
 }
 
 .featured-card > h3 {
@@ -409,6 +409,7 @@ main > h2 {
     transition: 0.2s;
     transform: scale(1.02);
     box-shadow: 2px 2px 5px var(--secondary-color);
+    border: none;
 }
 
 .shop {
@@ -423,6 +424,20 @@ main > h2 {
     width: 100%;
     max-width: 1600px;
     border-bottom: 2px solid var(--secondary-color);
+}
+
+#qrContainer {
+    transition: 0.2s;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border-radius: 10px;
+    box-shadow: 1px 1px 5px var(--secondary-color);
+    text-align: center;
+    font-size: 1.2rem;
+    padding: 10px;
+    margin-bottom: 80px;
+    --btn-bg: var(--secondary-color);
+
 }
 
 /* Footer Styles */
