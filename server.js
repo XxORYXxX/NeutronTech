@@ -8,7 +8,6 @@ require('dotenv').config();
 
 const app = express();
 const PORT = 3000;
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
 app.use(cors({
     origin: 'http://localhost:63342',
@@ -24,7 +23,7 @@ const pool = mysql.createPool({
     host: 'localhost',
     user: 'Client',
     password: '[|ClientUser765|]',
-    database: 'NeutronTech_Server',
+    database: 'SOKU_Server',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
@@ -38,45 +37,31 @@ pool.getConnection((err, connection) => {
         connection.release();
     }
 });
+let historyChat = [];
+
 app.post('/chat', async (req, res) => {
     try {
         const { message } = req.body;
-
         if (!message) {
-            return res.status(400).json({
-                reply: 'No message provided'
-            });
+            return res.status(400).json({ reply: 'No message provided' });
         }
 
+        historyChat.push({ role: 'user', parts: [{ text: message }] });
+
+        const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
         const model = genAI.getGenerativeModel({ model: 'gemini-2.5-pro' });
 
-        const prompt = `
-Eres un asistente útil de NeutronTech.
-
-Tu conocimiento incluye:
-- Tecnología y productos electrónicos
-- Soporte técnico  
-- Información sobre productos
-
-Respuestas:
-1. Sé amable y profesional
-2. Proporciona información útil
-3. Si no sabes algo, reconócelo
-4. Si te preguntan en un idioma responde en ese idioma
-
-Usuario pregunta: ${message}
-`;
-
-        const result = await model.generateContent(prompt);
+        const chat = model.startChat({ history: historyChat });
+        const result = await chat.sendMessage(message);
         const response = await result.response;
         const text = response.text();
+
+        historyChat.push({ role: 'model', parts: [{ text }] });
 
         res.json({ reply: text });
     } catch (error) {
         console.error('Error in chat endpoint:', error);
-        res.status(500).json({
-            reply: 'Lo siento, estoy teniendo problemas para responder. ¿Puedes intentarlo de nuevo más tarde?'
-        });
+        res.status(500).json({ reply: 'Lo siento, estoy teniendo problemas para responder. ¿Puedes intentarlo de nuevo más tarde?' });
     }
 });
 

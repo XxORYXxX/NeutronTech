@@ -3,8 +3,8 @@
 :root {
     font-family: Arial, sans-serif;
     --primary-color: rgba(43, 43, 43, 0.9); /*jet*/
-    --secondary-color: rgba(231, 94, 117, 0.9); /*bright-pink-crayola*/
-    --tertiary-color: rgba(242, 242, 242, 1); /*white-smoke*/
+    --secondary-color: rgba(214, 100, 190, 0.9); /*electric-violet*/
+    --tertiary-color: rgba(242, 242, 242, 0.9); /*white-smoke*/
     --quaternary-color: rgba(214, 214, 214, 1); /*timber-wolf*/
     --quiternary-color: rgba(187, 199, 165, 1); /*sage*/
     --spark-background: rgba(43, 43, 43, 0.9); /*jet*/
@@ -12,7 +12,7 @@
 
 .theme-inverted {
     --primary-color: rgba(242, 242, 242, 0.9);
-    --secondary-color: rgba(231, 94, 117, 0.9);
+    --secondary-color: rgba(189, 45, 135, 0.9);
     --spark-background: rgba(222, 222, 222, 1);
 }
 
@@ -116,7 +116,6 @@ header {
     background-color: var(--primary-color); !important;
     border-radius: 0;
     box-shadow: 1px 1px 5px var(--secondary-color); !important;
-    box-shadow-left: none;
     text-decoration: none;
     margin-left: 0; !important;
 }
@@ -125,8 +124,15 @@ header {
     transition: 0.2s;
     background: none; !important;
     box-shadow: none; !important;
-    transform: scale(1); !important;
+
     border-radius: 0; !important;
+}
+
+.logo:focus {
+    transition: 0.2s;
+    background: none; !important;
+    box-shadow: none; !important;
+    transform: scale(0.9); !important;
 }
 
 header > h1 {
