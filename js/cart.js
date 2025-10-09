@@ -93,7 +93,7 @@ function handlePurchaseCompletion() {
     if (savedCart) {
         const cart = JSON.parse(savedCart);
         const details = cart.map(p => `${p.nombre} ($${p.precio}) ${p.category}`).join(', ');
-        const qrText = `SOKU purchase: ${details}`;
+        const qrText = `NeutronTech purchase: ${details}`;
         QRCode.toCanvas(qrText, {width: 256}, function (error, canvas) {
             if (error) {
                 qrContainer.innerHTML = '<p>Error generating QR code</p>';

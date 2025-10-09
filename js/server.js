@@ -61,7 +61,7 @@ app.post('/chat', async (req, res) => {
 
         historyChat.push({ role: 'user', parts: [{ text: message }] });
 
-        const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+        const genAI = new GoogleGenerativeAI("AIzaSyCNOd6dw1qv-ad1H7lFp-H7ae0lbUK8gzE");
 
         const model = genAI.getGenerativeModel({ model: 'gemini-2.5-pro' });
 
