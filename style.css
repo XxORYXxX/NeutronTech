@@ -106,6 +106,59 @@ header {
     border-bottom: 2px solid var(--secondary-color);
 }
 
+.shrink {
+    transition: 0.2s ease;
+    height:110px;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+            "a b c";
+    column-gap: 10px;
+    margin: 0;
+    align-items: center;
+    align-content: center;
+}
+
+.shrink > h1 {
+    grid-area: b;
+    transition: 0.2s ease;
+    font-size: 2rem;
+    margin-left: -25px;
+    margin-top: 10px;
+}
+
+.shrink > h2 {
+    transition: 0.2s ease;
+    display: none;
+}
+
+.shrink > nav {;
+    grid-area: c;
+    transition: 0.2s ease;
+    margin-top: 10px;
+}
+
+.shrink > nav > a {
+    transition: 0.2s ease;
+    font-size: 1rem;
+}
+
+.shrink > .logo {
+    transition: 0.2s ease;
+    transform: scale(0.6);
+}
+
+.shrink > .logo:hover {
+    transition: 0.2s ease;
+    transform: scale(0.6);
+}
+
+.shrink > .logo:focus {
+    transition: 0.2s ease;
+    transform: scale(0.5);
+}
+
 .logo {
     height: 120px;
     width: 100%;
@@ -113,15 +166,16 @@ header {
     grid-area: a;
     border-right: 2px solid var(--secondary-color);
     transition: 0.2s;
-    background-color: var(--primary-color); !important;
+    background: none; !important;
     border-radius: 0;
     box-shadow: 1px 1px 5px var(--secondary-color); !important;
     text-decoration: none;
+    transform: scale(1);
     margin-left: 0; !important;
 }
 
 .logo:hover {
-    transition: 0.2s;
+    transition: 0.2s ease;
     background: none; !important;
     box-shadow: none; !important;
 

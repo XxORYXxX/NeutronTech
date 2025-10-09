@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SOKU </title>
+    <title>NeutronTech </title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="images/logoWB.svg" type="image/x-icon">
+    <link rel="icon" href="images/NEUTRONTECH2.svg" type="image/x-icon">
 </head>
 <body>
-<header>
-    <a href="index.html" class="logo"><img src="images/logoTB.svg" alt="SOKU Logo" width="100" height="100"></a>
-    <h1>SOKU </h1>
-    <h2>Welcome to SOKU, your go-to platform for all things related to technology and computing.</h2>
+<header id="header">
+    <a href="index.html" class="logo"><img src="images/logo.svg" alt="NeutronTech Logo" width="100" height="100"></a>
+    <h1>NeutronTech </h1>
+    <h2>Welcome to NeutronTech, your go-to platform for all things related to technology and computing.</h2>
     <nav>
         <a href="index.html">Home</a>
         <a href="about.html">About</a>
@@ -36,21 +36,21 @@
     <!-- Cart bottom -->
     <a class="cart" href="cart.html"><img src="images/cart.svg" width="30" height="30" alt="product image"></a>
     <!-- Footer Content -->
-    <p> &copy 2025 SOKU. All rights reserved. Follow us on:</p>
+    <p> &copy 2025 NeutronTech. All rights reserved. Follow us on:</p>
     <div>
-        <a href="https://twitter.com/computech" target="_blank" rel="noopener">Twitter</a>
-        <a href="https://facebook.com/computech" target="_blank" rel="noopener">Facebook</a>
-        <a href="https://instagram.com/computech" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://twitter.com/NeutronTech" target="_blank" rel="noopener">Twitter</a>
+        <a href="https://facebook.com/NeutronTech" target="_blank" rel="noopener">Facebook</a>
+        <a href="https://instagram.com/NeutronTech" target="_blank" rel="noopener">Instagram</a>
     </div>
 </footer>
 <!-- Floating Chat Icon -->
 <div class="chat-float-icon">
-    <img src="images/logoTB.svg" alt="Chat with SOKU" width="60" height="60" />
+    <img src="images/logo.svg" alt="Chat with NeutronTech" width="60" height="60" />
 </div>
 
 <!-- Chat Window (hidden by default) -->
 <div class="chat-window">
-    <div class="chat-header">Chat SOKU <span class="chat-close">&times;</span></div>
+    <div class="chat-header">Chat NeutronTech <span class="chat-close">&times;</span></div>
     <div class="chatbox"></div>
     <label>
         <input class="userInput" placeholder="Type your message..." />
@@ -59,183 +59,7 @@
 </div>
 </body>
 </html>
-<script>
-    (function () {
-        const KEY = 'themeInverted';
-        const saved = localStorage.getItem(KEY) === 'true';
-        const html = document.documentElement;
-        if (saved) html.classList.add('theme-inverted');
-
-        const btn = document.getElementById('toggleThemeBtn');
-        const updateLabel = () => {
-            const inverted = html.classList.contains('theme-inverted');
-            btn.textContent = inverted ? 'Dark Mode' : 'Light Mode';
-            btn.setAttribute('aria-pressed', String(inverted));
-        };
-
-        if (btn) {
-            updateLabel();
-            btn.addEventListener('click', () => {
-                html.classList.toggle('theme-inverted');
-                localStorage.setItem(KEY, String(html.classList.contains('theme-inverted')));
-                updateLabel();
-            });
-        }
-    })();
-
-    // Toggle the chat window (show/hide)
-    document.querySelector('.chat-float-icon').onclick = function() {
-        const chatWindow = document.querySelector('.chat-window');
-        if (chatWindow.style.display === 'flex') {
-            chatWindow.style.display = 'none';
-        } else {
-            chatWindow.style.display = 'flex';
-        }
-    };
-    // Close the chat window
-    document.querySelector('.chat-close').onclick = function() {
-        document.querySelector('.chat-window').style.display = 'none';
-    };
-
-    // Send a message on a button click
-    document.querySelector('.chat-send').onclick = sendMessage;
-    // Send a message on an Enter key
-    document.querySelector('.userInput').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') sendMessage();
-    });
-
-    async function sendMessage() {
-        const inputElem = document.querySelector('.userInput');
-        const chatbox = document.querySelector('.chatbox');
-        const input = inputElem.value.trim();
-        if (!input) return;
-        chatbox.innerHTML += `<p><b>You:</b> ${input}</p>`;
-        inputElem.value = '';
-        // Add typing indicator
-        const typingId = 'bot-typing';
-        chatbox.innerHTML += `<p id="${typingId}"><i>Bot is typing...</i></p>`;
-        chatbox.scrollTop = chatbox.scrollHeight;
-        try {
-            const res = await fetch('http://localhost:3000/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: input }),
-            });
-            const data = await res.json();
-            // Remove the typing indicator
-            const typingElem = document.getElementById(typingId);
-            if (typingElem) typingElem.remove();
-            chatbox.innerHTML += `<p><b>Bot:</b> ${data.reply}</p>`;
-            chatbox.scrollTop = chatbox.scrollHeight;
-        } catch (error) {
-            console.error('Error:', error);
-            const typingElem = document.getElementById(typingId);
-            if (typingElem) typingElem.remove();
-            chatbox.innerHTML += `<p><b>Bot:</b> Error del cliente. Intenta nuevamente.</p>`;
-            chatbox.scrollTop = chatbox.scrollHeight;
-        }
-    }
-    // Carrito
-    window.addEventListener('DOMContentLoaded', function() {
-        document.body.classList.add('fade-in');
-        // Cargar y mostrar los productos del cart
-        showCartContents();
-    });
-
-    // Función para mostrar los productos en el cart
-    function showCartContents() {
-        const savedCart = localStorage.getItem('cart');
-        const cartContainer = document.querySelector('.cart-container');
-
-        // Limpiar el contenedor
-        cartContainer.innerHTML = '';
-
-        if (savedCart && JSON.parse(savedCart).length > 0) {
-            const cart = JSON.parse(savedCart);
-            let total = 0;
-
-            // Crear elementos para cada producto
-            cart.forEach((product, index) => {
-                const itemDiv = document.createElement('div');
-                itemDiv.className = 'cart-item';
-
-                // Extraer solo el número del precio
-                const normalized = String(product.precio).replace(/[^\d.-]/g, '');
-                const value = Number(normalized);
-                total += isNaN(value) ? 0 : value;
-
-                itemDiv.innerHTML = `
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin: 10px; border-bottom: 1px solid #E75E75; padding-bottom: 10px;">
-                        <img class="cartImage" src="${product.imagen}" alt="${product.nombre}" height="200">
-                        <div style="flex: 1; margin-right: 100px; text-align: center;">
-                            <p><strong>${product.nombre}</strong></p>
-                            <p>${product.description}</p>
-                            <p>$${product.precio}</p>
-                        </div>
-                        <button onclick="deleteCartItem(${index})" class="cartButton">Delete</button>
-                    </div>
-                `;
-
-                cartContainer.appendChild(itemDiv);
-            });
-
-            // Agregar el total y botón de pagar
-            const totalDiv = document.createElement('div');
-            totalDiv.className = 'cart-total';
-            totalDiv.innerHTML = `
-                <div style="margin-top: 20px; padding-top: 10px; border-top: 1px solid #ccc;">
-                    <p><strong>Total: $${total.toLocaleString()}</strong></p>
-                    <button onclick="handlePurchaseCompletion()" class="cartButton">Pay</button>
-                </div>
-            `;
-
-            cartContainer.appendChild(totalDiv);
-        } else {
-            // Mostrar mensaje si el cart está vacío
-            cartContainer.innerHTML = '<p>No hay productos en el carrito</p>';
-        }
-    }
-
-    // Función para eliminar un producto del cart
-    async function deleteCartItem(index) {
-        const savedCart = localStorage.getItem('cart');
-        if (savedCart) {
-            const cart = JSON.parse(savedCart);
-            const product = cart[index];
-            cart.splice(index, 1);
-            localStorage.setItem('cart', JSON.stringify(cart));
-            await fetch('http://localhost:3000/api/products/increment-stock', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: product.id })
-            });
-            showCartContents();
-        }
-    }
-
-    // Función para realizar el pago
-    function handlePurchaseCompletion() {
-        const savedCart = localStorage.getItem('cart');
-        // Generate QR with cart details before clearing the cart
-        const qrContainer = document.getElementById('qrContainer');
-        const  ratingSurvey = document.getElementById('ratingSurvey');
-        qrContainer.innerHTML = ''; // Clear previous QR
-
-        if (savedCart) {
-            const cart = JSON.parse(savedCart);
-            const details = cart.map(p => `${p.nombre} ($${p.precio})`).join(', ');
-            const qrText = `Compra SOKU: ${details}`;
-            QRCode.toCanvas(qrText, {width: 256}, function (error, canvas) {
-                if (error) {
-                    qrContainer.innerHTML = '<p>Error generating QR code.</p>';
-                } else {
-                    qrContainer.innerHTML = '<h3 style="margin-bottom: 5px">Tu código QR de compra:</h3>';
-                    qrContainer.appendChild(canvas);
-                }
-            });
-        }
-        alert('¡Gracias por tu compra!');
-        localStorage.removeItem('cart');
-        showCartContents();
-    }
-</script>
+<script src="js/theme.js"></script>
+<script src="js/chat.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/shrink.js"></script>

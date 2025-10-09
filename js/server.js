@@ -17,13 +17,13 @@ app.use(cors({
 
 app.use(express.json());
 
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/images', express.static(path.join(__dirname, '..', 'images')));
 
 const pool = mysql.createPool({
     host: 'localhost',
     user: 'Client',
     password: '[|ClientUser765|]',
-    database: 'SOKU_Server',
+    database: 'NeutronTech_Server',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
@@ -40,31 +40,61 @@ pool.getConnection((err, connection) => {
 let historyChat = [];
 
 app.post('/chat', async (req, res) => {
+    let connection;
     try {
         const { message } = req.body;
         if (!message) {
             return res.status(400).json({ reply: 'No message provided' });
         }
 
+        connection = await pool.promise().getConnection();
+        const [products] = await connection.execute('SELECT name, description, price FROM products LIMIT 5');
+        connection.release(); // Make sure to release the connection
+
+        const productInfo = products.map(p => `${p.name}: ${p.description}: ${p.price}`).join('\n');
+        const systemContext = `Available products information:\n${productInfo}\n\nAnswer the user based on this information and be helpful.`;
+
+        if (historyChat.length === 0) {
+            historyChat.push({ role: 'user', parts: [{ text: systemContext }] });
+            historyChat.push({ role: 'model', parts: [{ text: "Understood. I have loaded the product information. How can I help you?" }] });
+        }
+
         historyChat.push({ role: 'user', parts: [{ text: message }] });
 
         const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+
         const model = genAI.getGenerativeModel({ model: 'gemini-2.5-pro' });
 
-        const chat = model.startChat({ history: historyChat });
+        const chat = model.startChat({
+            history: historyChat,
+        });
+
         const result = await chat.sendMessage(message);
         const response = await result.response;
         const text = response.text();
 
+        // Step 7: Add the model response to the history
         historyChat.push({ role: 'model', parts: [{ text }] });
 
         res.json({ reply: text });
+
     } catch (error) {
-        console.error('Error in chat endpoint:', error);
-        res.status(500).json({ reply: 'Lo siento, estoy teniendo problemas para responder. ¿Puedes intentarlo de nuevo más tarde?' });
+        console.error('Detailed error in /chat endpoint:', error);
+
+        // Solution: more specific error handling
+        let errorMessage = 'Sorry, I am having trouble responding. Please try again later.';
+
+        if (error.message.includes('API key not valid')) {
+            errorMessage = 'Configuration error: The API key is not valid. Please verify your Google AI key.';
+        } else if (error.message.includes('Quota exceeded') || error.message.includes('RESOURCE_EXHAUSTED')) {
+            errorMessage = 'Usage limit exceeded at the moment. Please try again later.';
+        } else if (error.message.includes('Model') && error.message.includes('not found')) {
+            errorMessage = 'Configuration error: The specified model does not exist.';
+        }
+
+        res.status(500).json({ reply: errorMessage });
     }
 });
-
 // Get products by category
 app.get('/api/products/category/:category', async (req, res) => {
     let connection;
