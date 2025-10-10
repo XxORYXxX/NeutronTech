@@ -1,28 +1,28 @@
-// Carrito
+// Cart
 window.addEventListener('DOMContentLoaded', function() {
     document.body.classList.add('fade-in');
-    // Cargar y mostrar los productos del cart
+    // Load and display the cart products
     showCartContents();
 });
 
-// Función para mostrar los productos en el cart
+// Function to display the products in the cart
 function showCartContents() {
     const savedCart = localStorage.getItem('cart');
     const cartContainer = document.querySelector('.cart-container');
 
-    // Limpiar el contenedor
+    // Clear the container
     cartContainer.innerHTML = '';
 
     if (savedCart && JSON.parse(savedCart).length > 0) {
         const cart = JSON.parse(savedCart);
         let total = 0;
 
-        // Crear elementos para cada producto
+        // Create elements for each product
         cart.forEach((product, index) => {
             const itemDiv = document.createElement('div');
             itemDiv.className = 'cart-item';
 
-            // Extraer solo el número del precio
+            // Extract only the numeric part of the price
             const normalized = String(product.precio).replace(/[^\d.-]/g, '');
             const value = Number(normalized);
             total += isNaN(value) ? 0 : value;
@@ -42,7 +42,7 @@ function showCartContents() {
             cartContainer.appendChild(itemDiv);
         });
 
-        // Agregar el total y botón de pagar
+        // Add the total and the pay button
         const totalDiv = document.createElement('div');
         totalDiv.className = 'cart-total';
         totalDiv.innerHTML = `
@@ -54,12 +54,12 @@ function showCartContents() {
 
         cartContainer.appendChild(totalDiv);
     } else {
-        // Mostrar mensaje si el cart está vacío
+        // Show a message if the cart is empty
         cartContainer.innerHTML = '<p>There are no products in your cart</p>';
     }
 }
 
-// Función para eliminar un producto del cart
+// Function to remove a product from the cart
 async function deleteCartItem(index) {
     if (!confirm('Are you sure you want to remove this item?')) return;
     
