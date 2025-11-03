@@ -83,7 +83,7 @@ async function deleteCartItem(index) {
     }
 }
 
-// Función para realizar el pago
+// Función para realizar el pago en el carrito
 function handlePurchaseCompletion() {
     const savedCart = localStorage.getItem('cart');
     // Generate QR with cart details before clearing the cart
