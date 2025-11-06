@@ -121,13 +121,19 @@ app.get('/api/products/category/:category', async (req, res) => {
 
 // Decrease stock by 1
 app.post('/api/products/decrement-stock', async (req, res) => {
-    const { id } = req.body;
+    const { id, quantity } = req.body;
+    const qty = Math.max(1, Number(quantity) || 1);
+
+    if (id === undefined || id === null || Number.isNaN(Number(id))) {
+        return res.status(400).json({ error: 'Missing or invalid id' });
+    }
+
     let connection;
     try {
         connection = await pool.promise().getConnection();
         await connection.execute(
-            'UPDATE products SET stock = stock - 1 WHERE id = ? AND stock > 0',
-            [id]
+            'UPDATE products SET stock = stock - ? WHERE id = ? AND stock >= ?;',
+            [qty, Number(id), qty]
         );
         res.json({ success: true });
     } catch (error) {
@@ -140,13 +146,19 @@ app.post('/api/products/decrement-stock', async (req, res) => {
 
 // Increase stock by 1
 app.post('/api/products/increment-stock', async (req, res) => {
-    const { id } = req.body;
+    const { id, quantity } = req.body;
+    const qty = Math.max(1, Number(quantity) || 1);
+
+    if (id === undefined || id === null || Number.isNaN(Number(id))) {
+        return res.status(400).json({ error: 'Missing or invalid id' });
+    }
+
     let connection;
     try {
         connection = await pool.promise().getConnection();
         await connection.execute(
-            'UPDATE products SET stock = stock + 1 WHERE id = ?',
-            [id]
+            'UPDATE products SET stock = stock + ? WHERE id = ?;',
+            [qty, Number(id)]
         );
         res.json({ success: true });
     } catch (error) {
